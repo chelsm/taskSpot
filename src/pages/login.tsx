@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { handleLogin } from "../utils/authentification";
+import { handleLogin } from "../features/auth";
 
 const useStyles = makeStyles({
   root: {

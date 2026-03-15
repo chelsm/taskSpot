@@ -1,5 +1,5 @@
-import type { TodoList, Task } from "../../types/todo";
-import { db, auth } from "../firebase";
+import type { TodoList, Task } from "../../../types/todo";
+import { db, auth } from "../../../services/firebase";
 import {
   doc,
   query,
@@ -11,6 +11,7 @@ import {
   updateDoc,
   getDoc,
   deleteDoc,
+  orderBy,
 } from "firebase/firestore";
 
 // --------------
@@ -21,7 +22,13 @@ export const getUserLists = async () => {
   const user = auth.currentUser;
   if (!user) throw new Error("User not authenticated");
   const listsRef = collection(db, "lists");
-  const q = query(listsRef, where("ownerId", "==", user.uid));
+
+  const q = query(
+    listsRef, 
+    where("ownerId", "==", user.uid), 
+    orderBy("modifiedAt", "desc")
+  );
+  // const q = query(listsRef, where("ownerId", "==", user.uid));
   const querySnapshot = await getDocs(q);
 
   return querySnapshot.docs.map((doc) => {
@@ -87,11 +94,12 @@ export const createList = async (title: string) => {
 };
 
 export const createTask = async (listId: string, description: string) => {
+  const now = new Date();
   const tasksRef = await addDoc(collection(db, "lists", listId, "tasks"), {
     description,
     completed: false,
-    createdAt: serverTimestamp(),
-    modifiedAt: serverTimestamp(),
+    createdAt: now,
+    modifiedAt: now,
   });
   return tasksRef;
 };
@@ -105,15 +113,16 @@ export const updateTaskStatus = async (
   taskId: string,
   completed: boolean,
 ) => {
+  const now = new Date();
   const taskRef = doc(db, "lists", listId, "tasks", taskId);
   const listRef = doc(db, "lists", listId);
 
   await updateDoc(taskRef, {
     completed,
-    modifiedAt: serverTimestamp(),
+    modifiedAt: now,
   });
     await updateDoc(listRef, {
-    modifiedAt: serverTimestamp(),
+    modifiedAt: now,
   });
 };
 
@@ -122,23 +131,25 @@ export const updateTaskDescription = async (
   taskId: string,
   description: string,
 ) => {
+  const now = new Date();
   const taskRef = doc(db, "lists", listId, "tasks", taskId);
   const listRef = doc(db, "lists", listId);
 
   await updateDoc(taskRef, {
     description,
-    modifiedAt: serverTimestamp(),
+    modifiedAt: now,
   });
   await updateDoc(listRef, {
-    modifiedAt: serverTimestamp(),
+    modifiedAt: now,
   });
 };
 
 export const updateListTitle = async (listId: string, title: string) => {
+  const now = new Date();
   const listRef = doc(db, "lists", listId);
   await updateDoc(listRef, {
     title,
-    modifiedAt: serverTimestamp(),
+    modifiedAt: now,
   });
 };
 

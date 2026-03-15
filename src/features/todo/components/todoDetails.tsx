@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { Task, TodoList } from "../../types/todo";
+import type { Task, TodoList } from "../../../types/todo";
 import {
   getTasksByListId,
   updateTaskStatus,
@@ -8,7 +8,7 @@ import {
   deleteTask,
   updateListTitle,
   deleteList,
-} from "../../services/listService";
+} from "../services/todoService";
 import { useNavigate } from "react-router-dom";
 
 import { Timestamp } from "firebase/firestore";
@@ -41,7 +41,6 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "column",
     gap: "1.5rem",
-    border: "1px solid red",
     width: "stretch",
   },
   details__container: {
@@ -50,7 +49,6 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "column",
     gap: "1.5rem",
-    border: "1px solid red",
     width: "stretch",
   },
 
@@ -73,7 +71,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Details = ({ list, color }: ListCardProps) => {
+const TodoDetails = ({ list, color }: ListCardProps) => {
   const classes = useStyles();
   const navigate = useNavigate();
 
@@ -329,4 +327,4 @@ const Details = ({ list, color }: ListCardProps) => {
   );
 };
 
-export default Details;
+export default TodoDetails;

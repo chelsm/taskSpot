@@ -1,16 +1,17 @@
 import { useNavigate } from "react-router-dom";
-import { getUserLists } from "../services/listService";
+import { getUserLists } from "../features/todo/services/todoService";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import type { TodoList } from "../types/todo";
-
-import { Box, Button, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import CardList from "../components/card/listCard";
-import Details from "../components/card/detailsCard";
-import NavBar from "../components/navBar";
-import CreateListOfTasks from "../components/createListOfTasks";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { Box, Typography } from "@mui/material";
+import NavBar from "../components/layout/navBar";
+import TodoDetails from "../features/todo/components/todoDetails";
+import TodoCreate from "../features/todo/components/todoCreate";
+import TodoListGrid from "../features/todo/components/todoListGrid";
+import {
+  DASHBOARD_CONTENT,
+  COLORS_PASTEL,
+} from "../features/todo/constants/todo.constants";
 
 const useStyles = makeStyles({
   root: {
@@ -81,11 +82,9 @@ const Dashboard = ({ view }: DashboardProps) => {
 
   const [lists, setLists] = useState<TodoList[]>([]);
   const [selectedList, setSelectedList] = useState<TodoList | null>(null);
-
   const currentView = view || (selectedList ? "details" : "lists");
-  const colorsPastel = ["#ecc7c6", "#f6e0c4", "#d5d2fa", "#c9efdd"];
+  const { title, subtitle } = DASHBOARD_CONTENT[currentView];
 
-  console.log("lists:", lists);
   const fetchLists = async () => {
     try {
       const data = await getUserLists();
@@ -99,76 +98,37 @@ const Dashboard = ({ view }: DashboardProps) => {
     fetchLists();
   }, [currentView]);
 
-  const dashboardTitles = {
-    lists: {
-      title: "Things to do",
-      subtitle: "Welcome to your dashboard! View and manage your todo lists.",
-    },
-    create: {
-      title: "Create a new list",
-      subtitle: "Add tasks and organize your work.",
-    },
-    details: {
-      title: "List details",
-      subtitle: "Manage tasks inside your list.",
-    },
-  };
-
-  const handleClickGoToCreateList = () => navigate("/create-list");
+  useEffect(() => {
+    if (view === "lists" || view === "create") {
+      setSelectedList(null);
+    }
+  }, [view]);
 
   const renderContent = () => {
-    if (currentView === "create") {
-      return (
-        <Box>
-          <CreateListOfTasks setSelectedList={setSelectedList} />
-        </Box>
-      );
-    }
+    switch (currentView) {
+      case "create":
+        return <TodoCreate setSelectedList={setSelectedList} />;
 
-    if (currentView === "details" && selectedList) {
-      const listIndex = lists.findIndex((l) => l.id === selectedList.id);
-      const color = colorsPastel[listIndex % colorsPastel.length];
-      return (
-        <Box>
-          <Details list={selectedList} color={color} />
-        </Box>
-      );
-    }
+      case "details":
+        if (!selectedList) return null;
+        const listIndex = lists.findIndex((l) => l.id === selectedList.id);
+        return (
+          <TodoDetails
+            list={selectedList}
+            color={COLORS_PASTEL[listIndex % 4]}
+          />
+        );
 
-    return (
-      <>
-        <Box
-          sx={{ display: "flex", justifyContent: "flex-end", width: "100%" }}
-        >
-          <Button
-            variant="contained"
-            startIcon={<AddCircleIcon />}
-            onClick={handleClickGoToCreateList}
-            sx={{
-              margin: "1rem",
-              backgroundColor: "var(--bg-button)",
-              "&:hover": { backgroundColor: "var(--bg-button-hover)" },
-            }}
-          >
-            Create New List
-          </Button>
-        </Box>
-        <Box className={classes.task_list__container}>
-          {lists.map((list, i) => {
-            const color = colorsPastel[i % colorsPastel.length];
-            return (
-              <Box
-                key={list.id}
-                onClick={() => setSelectedList(list)}
-                sx={{ cursor: "pointer" }}
-              >
-                <CardList list={list} color={color} />
-              </Box>
-            );
-          })}
-        </Box>
-      </>
-    );
+      default:
+        return (
+          <TodoListGrid
+            lists={lists}
+            onSelect={setSelectedList}
+            onCreateClick={() => navigate("/create-list")}
+            classes={classes}
+          />
+        );
+    }
   };
 
   return (
@@ -179,12 +139,8 @@ const Dashboard = ({ view }: DashboardProps) => {
 
       <Box className={classes.dashboard__container}>
         <Box className={classes.title__container}>
-          <Typography variant="h1">
-            {dashboardTitles[currentView].title}
-          </Typography>
-          <Typography variant="subtitle1">
-            {dashboardTitles[currentView].subtitle}
-          </Typography>
+          <Typography variant="h1">{title}</Typography>
+          <Typography variant="subtitle1">{subtitle}</Typography>
         </Box>
 
         <Box className={classes.right__container}>{renderContent()}</Box>

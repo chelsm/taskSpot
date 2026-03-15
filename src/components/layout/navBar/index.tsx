@@ -1,5 +1,5 @@
 import makeStyles from "@mui/styles/makeStyles/makeStyles";
-import { handleLogout } from "../../utils/authentification";
+import { handleLogout } from "../../../features/auth";
 import LogoutIcon from "@mui/icons-material/Logout";
 import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import Button from "@mui/material/Button";

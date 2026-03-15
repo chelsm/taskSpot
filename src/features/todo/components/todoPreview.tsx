@@ -1,7 +1,6 @@
-import type { Task, TodoList } from "../../types/todo";
+import type { Task, TodoList } from "../../../types/todo";
 import { useEffect, useState } from "react";
-import { getTasksByListId } from "../../services/listService";
-import { useDispatch } from "react-redux";
+import { getTasksByListId } from "../services/todoService";
 import { Box, Checkbox, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useNavigate } from "react-router-dom";
@@ -43,9 +42,8 @@ interface ListCardProps {
   color: string;
 }
 
-const Card = ({ list, color }: ListCardProps) => {
+const TodoPreview = ({ list, color }: ListCardProps) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
     const navigate = useNavigate();
   
 
@@ -122,4 +120,4 @@ const Card = ({ list, color }: ListCardProps) => {
   );
 };
 
-export default Card;
+export default TodoPreview;

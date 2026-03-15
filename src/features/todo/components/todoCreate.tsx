@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { createList, createTask } from "../../services/listService";
+import { createList, createTask } from "../services/todoService";
 import { useDispatch } from "react-redux";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { useNavigate } from "react-router-dom";
-import type { TodoList } from "../../types/todo";
+import type { TodoList } from "../../../types/todo";
 
 const useStyles = makeStyles({
   root: {
@@ -32,11 +32,11 @@ const useStyles = makeStyles({
   },
 });
 
-interface CreateListOfTasksProps {
+interface TodoCreateProps {
   setSelectedList: (list: TodoList) => void;
 }
 
-const CreateListOfTasks = ({ setSelectedList }: CreateListOfTasksProps) => {
+const TodoCreate = ({ setSelectedList }: TodoCreateProps) => {
   const classes = useStyles();
   const navigate = useNavigate();
   const [tasks, setTasks] = useState<string[]>([""]);
@@ -168,4 +168,4 @@ const CreateListOfTasks = ({ setSelectedList }: CreateListOfTasksProps) => {
   );
 };
 
-export default CreateListOfTasks;
+export default TodoCreate;
