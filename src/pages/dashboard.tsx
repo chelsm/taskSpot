@@ -125,7 +125,6 @@ const Dashboard = ({ view }: DashboardProps) => {
             lists={lists}
             onSelect={setSelectedList}
             onCreateClick={() => navigate("/create-list")}
-            classes={classes}
           />
         );
     }

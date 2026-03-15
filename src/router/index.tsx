@@ -1,10 +1,8 @@
-// src/router.tsx
 import { Routes, Route, Navigate } from "react-router-dom";
 import Register from "../pages/register";
 import Login from "../pages/login";
 import Dashboard from "../pages/dashboard";
 import { useAuth } from "./useAuth"; 
-import CreateListOfTasks from "../features/todo/components/todoCreate";
 
 const AppRouter = () => {
   const { user, loading } = useAuth();

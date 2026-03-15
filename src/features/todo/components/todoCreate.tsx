@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { createList, createTask } from "../services/todoService";
-import { useDispatch } from "react-redux";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import AddCircleIcon from "@mui/icons-material/AddCircle";

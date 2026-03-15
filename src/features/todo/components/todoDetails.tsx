@@ -10,23 +10,11 @@ import {
   deleteList,
 } from "../services/todoService";
 import { useNavigate } from "react-router-dom";
-
 import { Timestamp } from "firebase/firestore";
-
-import {
-  Box,
-  Checkbox,
-  Typography,
-  TextField,
-  IconButton,
-  Button,
-} from "@mui/material";
-
+import { Box, Checkbox, TextField, IconButton, Button } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
