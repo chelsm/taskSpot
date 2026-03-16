@@ -25,6 +25,7 @@ const useStyles = makeStyles({
     boxShadow: "0px 4px 12px rgba(0,0,0,0.1)",
   },
   title: {
+    fontFamily: "Poppins-ExtraBold",
     fontSize: "2rem",
     fontWeight: "bold",
     textAlign: "center",
@@ -91,12 +92,10 @@ const Login = () => {
   return (
     <Box className={classes.root}>
       <form onSubmit={handleClickLogin} className={classes.formContainer}>
-        <Typography className={classes.title}>Login</Typography>
-
+        <Typography variant="h1" className={classes.title}>Login</Typography>
         {errorMessage && (
           <Typography className={classes.errorMessage}>{errorMessage}</Typography>
         )}
-
         <TextField
           label="Email"
           type="email"
